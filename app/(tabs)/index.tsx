@@ -1,70 +1,133 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import React from 'react';
+import { View, Text, Image, StyleSheet, ScrollView,TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 
-export default function HomeScreen() {
+const MenuScreen = () => {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Comida al Vuelo</Text>
+          <Text style={styles.cartIcon}>🛒</Text>
+        </View>
+
+        {/* Section: Bebidas */}
+        <Text style={styles.sectionTitle}>BEBIDAS</Text>
+        <View style={styles.sectionContainer}>
+          <View style={styles.item}>
+          <Image source={require('@/assets/bebidas_frias.png')} style={styles.image_bebidaFria} />
+            <Text>Bebidas frias</Text>
+          </View>
+          <View style={styles.item}>
+            <Image source={require('@/assets/bebidas_calientes.png')} style={styles.image_platoCarta} />
+            <Text>Bebidas Calientes</Text>
+          </View>
+        </View>
+
+        {/* Section: Platos Fuertes */}
+        <Text style={styles.sectionTitle}>PLATOS FUERTES</Text>
+        <View style={styles.sectionContainer}>
+          <View style={styles.item}>
+            <Image source={require('@/assets/sopitas.png')} style={styles.image_Sopitas} />
+            <Text>Sopitas</Text>
+          </View>
+          <View style={styles.item}>
+            <Image source={require('@/assets/platos_carta.png')} style={styles.image_platoCarta} />
+            <Text>Platos a la carta</Text>
+          </View>
+          <View style={styles.item}>
+            <Image source={require('@/assets/corrientazo.png')} style={styles.image_platoCarta} />
+            <Text>Corrientazo</Text>
+          </View>
+        </View>
+
+        {/* Section: Menu Infantil */}
+        <Text style={styles.sectionTitle}>MENÚ INFANTIL</Text>
+        <View style={styles.sectionContainer}>
+          <View style={styles.item}>
+            <Image source={require('@/assets/menu_infantil.png')} style={styles.image_MenuInfantil} />
+            <Text>Para los niños...</Text>
+          </View>
+        </View>
+      </ScrollView>
+
+      {/* Footer */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
+      </View>
+    </View>
   );
-}
+};
+
+export default MenuScreen;
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 16, // Esto da espacio entre el contenido y el footer
+  },
+  header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 8,
+    padding: 16,
+    backgroundColor: '#d32f2f',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  headerText: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  cartIcon: {
+    fontSize: 24,
+    color: '#fff',
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 35,
+  },
+  sectionContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 10,
+  },
+  item: {
+    alignItems: 'center',
+    width: 110,
+  },
+  image_platoCarta: {
+    width: 120,
+    height: 70,
+  },
+  image_bebidaFria: {
+    width: 75,
+    height: 70,
+  },
+  image_Sopitas: {
+    width: 85,
+    height: 70,
+  },
+  image_MenuInfantil:{
+    width: 65,
+    height: 80,
+  },
+  footer: {
+    backgroundColor: '#d32f2f',
+    padding: 16,
+    alignItems: 'center',
+  },
+  footerText: {
+    color: '#fff',
+    fontSize: 16,
+    fontStyle: 'italic',
   },
 });
