@@ -1,10 +1,12 @@
+// index.tsx
 import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView,TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-
 const MenuScreen = () => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -17,13 +19,21 @@ const MenuScreen = () => {
         {/* Section: Bebidas */}
         <Text style={styles.sectionTitle}>BEBIDAS</Text>
         <View style={styles.sectionContainer}>
-          <View style={styles.item}>
-          <Image source={require('@/assets/bebidas_frias.png')} style={styles.image_bebidaFria} />
+          <TouchableOpacity
+            style={styles.item}
+            onPress={() => navigation.navigate('BebidasFrias')}
+          >
+            <Image source={require('@/assets/bebidas_frias.png')} style={styles.image_bebidaFria} />
             <Text>Bebidas frias</Text>
-          </View>
+          </TouchableOpacity>
           <View style={styles.item}>
+          <TouchableOpacity
+            style={styles.item}
+            onPress={() => navigation.navigate('BebidasCalientes')}
+          >
             <Image source={require('@/assets/bebidas_calientes.png')} style={styles.image_platoCarta} />
             <Text>Bebidas Calientes</Text>
+          </TouchableOpacity>
           </View>
         </View>
 
@@ -31,16 +41,31 @@ const MenuScreen = () => {
         <Text style={styles.sectionTitle}>PLATOS FUERTES</Text>
         <View style={styles.sectionContainer}>
           <View style={styles.item}>
+          <TouchableOpacity
+            style={styles.item}
+            onPress={() => navigation.navigate('Sopitas')}
+          >
             <Image source={require('@/assets/sopitas.png')} style={styles.image_Sopitas} />
             <Text>Sopitas</Text>
+          </TouchableOpacity>
           </View>
           <View style={styles.item}>
+          <TouchableOpacity
+            style={styles.item}
+            onPress={() => navigation.navigate('PlatosCarta')}
+          >
             <Image source={require('@/assets/platos_carta.png')} style={styles.image_platoCarta} />
             <Text>Platos a la carta</Text>
+          </TouchableOpacity>
           </View>
           <View style={styles.item}>
+          <TouchableOpacity 
+            style={styles.item}
+            onPress={() => navigation.navigate('Corrientazo')}
+          >
             <Image source={require('@/assets/corrientazo.png')} style={styles.image_platoCarta} />
             <Text>Corrientazo</Text>
+          </TouchableOpacity>
           </View>
         </View>
 
@@ -48,8 +73,13 @@ const MenuScreen = () => {
         <Text style={styles.sectionTitle}>MENÚ INFANTIL</Text>
         <View style={styles.sectionContainer}>
           <View style={styles.item}>
+          <TouchableOpacity
+            style={styles.item}
+            onPress={() => navigation.navigate('MenuInfantil')}
+          >
             <Image source={require('@/assets/menu_infantil.png')} style={styles.image_MenuInfantil} />
-            <Text>Para los niños...</Text>
+            <Text>Menu Infantil</Text>
+          </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -71,7 +101,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 16, // Esto da espacio entre el contenido y el footer
+    paddingBottom: 16,
   },
   header: {
     flexDirection: 'row',
@@ -116,7 +146,7 @@ const styles = StyleSheet.create({
     width: 85,
     height: 70,
   },
-  image_MenuInfantil:{
+  image_MenuInfantil: {
     width: 65,
     height: 80,
   },

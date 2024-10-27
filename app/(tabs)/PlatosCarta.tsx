@@ -1,8 +1,8 @@
-// BebidasFriasScreen.js
+// BebidasFriasScreen.tsx
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const BebidasFriasScreen = () => {
+const PlatosCarta = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -12,7 +12,7 @@ const BebidasFriasScreen = () => {
 
       {/* Contenido de la página de Bebidas Frías */}
       <View style={styles.content}>
-        <Text style={styles.sectionTitle}>Bebidas Frías</Text>
+        <Text style={styles.sectionTitle}>Platos a la carta</Text>
         {/* Aquí puedes agregar más contenido específico de esta pantalla */}
       </View>
 
@@ -23,7 +23,7 @@ const BebidasFriasScreen = () => {
   );
 };
 
-export default BebidasFriasScreen;
+export default PlatosCarta;
 
 const styles = StyleSheet.create({
   container: {
