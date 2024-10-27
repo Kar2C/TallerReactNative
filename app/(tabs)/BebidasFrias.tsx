@@ -140,22 +140,23 @@ const styles = StyleSheet.create({
   },
   image_soda: {
     width: 110,
-    height: 116,
+    height: 140,
     marginStart: 7,
   },
   image_jugoNaranja: {
-    width: 95,
-    height: 105,
+    width: 102,
+    height: 140,
+    marginStart: 15,
   },
   image_malteada: {
-    width: 60,
-    height: 165,
-    marginStart: 22,
+    width: 80,
+    height: 178,
+    marginStart: 35,
   },
   image_limonada: {
-    width: 120,
-    height: 157,
-    marginStart: 8,
+    width: 100,
+    height: 135,
+    marginStart: 17,
   },
   textContainer: {
     flex: 1,

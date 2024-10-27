@@ -18,11 +18,11 @@ const Sopitas = () => {
         <View style={styles.listContainer}>
           {/* Bebida 1 */}
           <View style={styles.listItemContainer}>
-            <Image source={require('@/assets//Bebidascalientes/te.png')} style={styles.image_soda} />
+            <Image source={require('@/assets/sopitas/sopaTomate.png')} style={styles.image_sopaTomate} />
             <View style={styles.textContainer}>
-              <Text style={styles.listItemTitle}>Té de Valeriana</Text>
-              <Text style={styles.description}>Suave y relajante, ideal para disfrutar en momentos de calma y descanso.</Text>
-              <Text style={styles.price}>$2.500</Text>
+              <Text style={styles.listItemTitle}>Sopa de Tomate</Text>
+              <Text style={styles.description}>Suave y sabrosa, con el auténtico sabor del tomate fresco, perfecta para una comida reconfortante.</Text>
+              <Text style={styles.price}>$7.000</Text>
               <View style={styles.actionContainer}>
                 <TouchableOpacity style={styles.cartButton}>
                   <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
@@ -35,11 +35,11 @@ const Sopitas = () => {
 
           {/* Bebida 2 */}
           <View style={styles.listItemContainer}>
-            <Image source={require('@/assets/BebidasFrias/naranja.png')} style={styles.image_jugoNaranja} />
+            <Image source={require('@/assets/sopitas/SopaPasta.png')} style={styles.image_sopaPasta} />
             <View style={styles.textContainer}>
-              <Text style={styles.listItemTitle}>Jugo de Naranja</Text>
-              <Text style={styles.description}>Natural y refrescante, con el sabor cítrico perfecto para acompañar cualquier comida.</Text>
-              <Text style={styles.price}>$6.000</Text>
+              <Text style={styles.listItemTitle}>Sopa de Pasta</Text>
+              <Text style={styles.description}>Caliente y reconfortante, con pasta suave en un caldo sabroso, ideal para disfrutar en cualquier momento.</Text>
+              <Text style={styles.price}>$10.000</Text>
               <View style={styles.actionContainer}>
                 <TouchableOpacity style={styles.cartButton}>
                   <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
@@ -52,11 +52,11 @@ const Sopitas = () => {
 
           {/* Bebida 3 */}
           <View style={styles.listItemContainer}>
-            <Image source={require('@/assets/BebidasFrias/malteada.png')} style={styles.image_malteada} />
+            <Image source={require('@/assets/sopitas/Sancocho.png')} style={styles.image_sancocho} />
             <View style={styles.textContainer}>
-              <Text style={styles.listItemTitle}>Malteada</Text>
-              <Text style={styles.description}>Cremosas y deliciosas, disponibles en sabores clásicos como chocolate, vainilla y fresa.</Text>
-              <Text style={styles.price}>$12.000</Text>
+              <Text style={styles.listItemTitle}>Sancocho</Text>
+              <Text style={styles.description}>Tradicional y sustancioso, con carne, tubérculos y verduras en un caldo lleno de sabor, perfecto para compartir en familia.</Text>
+              <Text style={styles.price}>$10.000</Text>
               <View style={styles.actionContainer}>
                 <TouchableOpacity style={styles.cartButton}>
                   <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
@@ -69,11 +69,11 @@ const Sopitas = () => {
 
           {/* Bebida 4 */}
           <View style={styles.listItemContainer}>
-            <Image source={require('@/assets/BebidasFrias/limonada.png')} style={styles.image_limonada} />
+            <Image source={require('@/assets/sopitas/cremaAuyama.png')} style={styles.image_cremaAuyama} />
             <View style={styles.textContainer}>
-              <Text style={styles.listItemTitle}>Limonada</Text>
-              <Text style={styles.description}>Refrescante y equilibrado, con el toque perfecto de acidez y dulzura para calmar la sed.</Text>
-              <Text style={styles.price}>$5.000</Text>
+              <Text style={styles.listItemTitle}>Crema de Auyama</Text>
+              <Text style={styles.description}>Suave y aterciopelada, con el sabor dulce y delicado de la auyama, perfecta para una comida ligera y reconfortante.</Text>
+              <Text style={styles.price}>$7.000</Text>
               <View style={styles.actionContainer}>
                 <TouchableOpacity style={styles.cartButton}>
                   <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
@@ -138,22 +138,22 @@ const styles = StyleSheet.create({
     borderColor: '#d32f2f',
     borderRadius: 8,
   },
-  image_soda: {
-    width: 110,
-    height: 116,
-    marginStart: 7,
+  image_sopaTomate: {
+    width: 175,
+    height: 145,
   },
-  image_jugoNaranja: {
-    width: 95,
-    height: 105,
+  image_sopaPasta: {
+    width: 153,
+    height: 135,
+    marginStart: 20,
   },
-  image_malteada: {
-    width: 60,
-    height: 165,
-    marginStart: 22,
+  image_sancocho: {
+    width: 160,
+    height: 125,
+    marginStart: 14,
   },
-  image_limonada: {
-    width: 120,
+  image_cremaAuyama: {
+    width: 170,
     height: 157,
     marginStart: 8,
   },
