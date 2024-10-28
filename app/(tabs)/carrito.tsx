@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 
@@ -7,21 +7,46 @@ const CarritoScreen = () => {
   const navigation = useNavigation();
   const { products, setProducts } = route.params as { products: any[], setProducts: React.Dispatch<React.SetStateAction<any[]>> };
 
-  const productosEnCarrito = products.filter((product) => product.quantity > 0);
+  // Estado local para las cantidades
+  const [localProducts, setLocalProducts] = useState(products);
+
+  useEffect(() => {
+    setLocalProducts(products);
+  }, [products]);
+
+  const productosEnCarrito = localProducts.filter((product) => product.quantity > 0);
   const total = productosEnCarrito.reduce((acc, product) => acc + product.price * product.quantity, 0);
 
   const handleRemoveProduct = (productId: number) => {
+    setLocalProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId 
+          ? { ...product, quantity: Math.max(0, product.quantity - 1) } 
+          : product
+      )
+    );
     setProducts((prevProducts) =>
       prevProducts.map((product) =>
-        product.id === productId ? { ...product, quantity: Math.max(0, product.quantity - 1) } : product
+        product.id === productId 
+          ? { ...product, quantity: Math.max(0, product.quantity - 1) } 
+          : product
       )
     );
   };
-
+  
   const handleAddProduct = (productId: number) => {
+    setLocalProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId 
+          ? { ...product, quantity: product.quantity + 1 } 
+          : product
+      )
+    );
     setProducts((prevProducts) =>
       prevProducts.map((product) =>
-        product.id === productId ? { ...product, quantity: product.quantity + 1 } : product
+        product.id === productId 
+          ? { ...product, quantity: product.quantity + 1 } 
+          : product
       )
     );
   };
@@ -62,9 +87,9 @@ const CarritoScreen = () => {
         <Text style={styles.totalText}>Total: ${total.toLocaleString()}</Text>
       </ScrollView>
 
-      <TouchableOpacity style={styles.checkoutButton} onPress={() => alert('Proceso de pago')}>
-        <Text style={styles.checkoutText}>Proceder al Pago</Text>
-      </TouchableOpacity>
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
+      </View>
     </View>
   );
 };
@@ -156,15 +181,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
-  checkoutButton: {
+  footer: {
     backgroundColor: '#d32f2f',
-    padding: 15,
-    margin: 10,
-    borderRadius: 5,
+    padding: 16,
+    alignItems: 'center',
   },
-  checkoutText: {
+  footerText: {
     color: '#fff',
-    textAlign: 'center',
-    fontSize: 18,
+    fontSize: 16,
+    fontStyle: 'italic',
   },
 });
