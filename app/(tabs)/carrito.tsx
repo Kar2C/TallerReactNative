@@ -33,14 +33,13 @@ const CarritoScreen = () => {
     0
   );
 
-  // Cálculo del costo de domicilio
-  let domicilio = 0; // Inicialmente se establece el domicilio en 0
+  let domicilio = 0;
   if (subtotal > 0) {
-    domicilio = 5000; // Costo base del domicilio
+    domicilio = 5000;
     if (subtotal > 90000) {
-      domicilio = 0; // Domicilio gratis
+      domicilio = 0;
     } else if (subtotal > 70000) {
-      domicilio = 3000; // Domicilio a $3.000
+      domicilio = 3000;
     }
   }
 
