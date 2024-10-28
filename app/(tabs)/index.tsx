@@ -1,5 +1,6 @@
-// index.tsx
 import React from "react";
+
+
 import {
   View,
   Text,
@@ -11,8 +12,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+
 const MenuScreen = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
+
 
   return (
     <View style={styles.container}>
@@ -20,11 +23,12 @@ const MenuScreen = () => {
         <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.headerText}>Comida al Vuelo</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("carrito")}>
+            <TouchableOpacity onPress={() => navigation.navigate("carrito", { products: [] })}>
               <Text style={styles.cartIcon}>🛒</Text>
             </TouchableOpacity>
           </View>
         </View>
+
 
         <Text style={styles.sectionTitle}>BEBIDAS</Text>
         <View style={styles.sectionContainer}>
@@ -51,6 +55,7 @@ const MenuScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
+
 
         {/* Section: Platos Fuertes */}
         <Text style={styles.sectionTitle}>PLATOS FUERTES</Text>
@@ -93,6 +98,7 @@ const MenuScreen = () => {
           </View>
         </View>
 
+
         {/* Section: Menu Infantil */}
         <Text style={styles.sectionTitle}>MENÚ INFANTIL</Text>
         <View style={styles.sectionContainer}>
@@ -111,6 +117,7 @@ const MenuScreen = () => {
         </View>
       </ScrollView>
 
+
       {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
@@ -119,7 +126,9 @@ const MenuScreen = () => {
   );
 };
 
+
 export default MenuScreen;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -188,3 +197,5 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 });
+
+

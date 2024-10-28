@@ -10,6 +10,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
+
 type Product = {
   id: number;
   name: string;
@@ -18,6 +19,7 @@ type Product = {
   image: any;
   quantity: number;
 };
+
 
 const productsData: Product[] = [
   {
@@ -54,9 +56,11 @@ const productsData: Product[] = [
   },
 ];
 
+
 const BebidasFrias = () => {
   const [products, setProducts] = useState(productsData);
   const navigation = useNavigation<StackNavigationProp<any>>();
+
 
   const addToCart = (productId: number) => {
     setProducts((prevProducts) =>
@@ -67,6 +71,7 @@ const BebidasFrias = () => {
       )
     );
   };
+
 
   return (
     <View style={styles.container}>
@@ -81,13 +86,23 @@ const BebidasFrias = () => {
         </TouchableOpacity>
       </View>
 
+
       <Text style={styles.title}>Bebidas Frías</Text>
+
 
       <ScrollView style={styles.content}>
         <View style={styles.listContainer}>
           {products.map((product) => (
             <View key={product.id} style={styles.listItemContainer}>
-              <Image source={product.image} style={styles.image_soda} />
+              <Image
+                source={product.image}
+                style={[
+                  product.id === 1 && styles.imageSoda,
+                  product.id === 2 && styles.imageNaranja,
+                  product.id === 3 && styles.imageMalteada,
+                  product.id === 4 && styles.imageLimonada,
+                ]}
+              />
               <View style={styles.textContainer}>
                 <Text style={styles.listItemTitle}>{product.name}</Text>
                 <Text style={styles.description}>{product.description}</Text>
@@ -111,6 +126,7 @@ const BebidasFrias = () => {
         </View>
       </ScrollView>
 
+
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
       </View>
@@ -118,7 +134,9 @@ const BebidasFrias = () => {
   );
 };
 
+
 export default BebidasFrias;
+
 
 const styles = StyleSheet.create({
   container: {
@@ -163,7 +181,21 @@ const styles = StyleSheet.create({
     borderColor: "#d32f2f",
     borderRadius: 8,
   },
-  image_soda: {
+  imageSoda: {
+    width: 110,
+    height: 140,
+    marginStart: 9,
+  },
+  imageNaranja: {
+    width: 120,
+    height: 150,
+  },
+  imageMalteada: {
+    width: 85,
+    height: 190,
+    marginStart: 27,
+  },
+  imageLimonada: {
     width: 110,
     height: 140,
     marginStart: 7,
@@ -218,3 +250,5 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 });
+
+
