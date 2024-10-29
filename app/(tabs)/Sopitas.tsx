@@ -1,90 +1,141 @@
-// BebidasFriasScreen.tsx
-import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const Sopitas = () => {
+type Product = {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: any;
+  quantity: number;
+};
+
+const productsData: Product[] = [
+  {
+    id: 1,
+    name: "Sopa de Tomate",
+    description: "Suave y sabrosa, con el auténtico sabor del tomate fresco, perfecta para una comida.",
+    price: 7000,
+    image: require("@/assets/sopitas/sopaTomate.png"),
+    quantity: 0,
+  },
+  {
+    id: 2,
+    name: "Sopa de Pasta",
+    description: "Caliente y reconfortante, con pasta suave en un caldo sabroso, ideal para disfrutar en cualquier momento.",
+    price: 10000,
+    image: require("@/assets/sopitas/SopaPasta.png"),
+    quantity: 0,
+  },
+  {
+    id: 3,
+    name: "Sancocho",
+    description: "Tradicional y sustancioso, con carne, tubérculos y verduras en un caldo lleno de sabor, perfecto para compartir en familia.",
+    price: 10000,
+    image: require("@/assets/sopitas/Sancocho.png"),
+    quantity: 0,
+  },
+  {
+    id: 4,
+    name: "Crema de Auyama",
+    description: "Suave y aterciopelada, con el sabor dulce y delicado de la auyama, perfecta para una comida ligera y reconfortante.",
+    price: 7000,
+    image: require("@/assets/sopitas/cremaAuyama.png"),
+    quantity: 0,
+  },
+];
+
+
+
+
+const sopitas = () => {
+  const [products, setProducts] = useState(productsData);
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+
+
+
+  const addToCart = (productId: number) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId
+          ? { ...product, quantity: product.quantity + 1 }
+          : product
+      )
+    );
+  };
+
+
+
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Comida al Vuelo</Text>
-        <Text style={styles.cartIcon}>🛒</Text>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("carrito", { products, setProducts })
+          }
+        >
+          <Text style={styles.cartIcon}>🛒</Text>
+        </TouchableOpacity>
       </View>
 
-      {/* Título centrado */}
+
+
+
       <Text style={styles.title}>Sopitas</Text>
 
+
+
+
       <ScrollView style={styles.content}>
-        {/* Lista de bebidas */}
         <View style={styles.listContainer}>
-          {/* Bebida 1 */}
-          <View style={styles.listItemContainer}>
-            <Image source={require('@/assets/sopitas/sopaTomate.png')} style={styles.image_sopaTomate} />
-            <View style={styles.textContainer}>
-              <Text style={styles.listItemTitle}>Sopa de Tomate</Text>
-              <Text style={styles.description}>Suave y sabrosa, con el auténtico sabor del tomate fresco, perfecta para una comida reconfortante.</Text>
-              <Text style={styles.price}>$7.000</Text>
-              <View style={styles.actionContainer}>
-                <TouchableOpacity style={styles.cartButton}>
-                  <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
-                </TouchableOpacity>
-                <Text style={styles.label}>Cantidad en el carrito:</Text>
-                <TextInput style={styles.quantityInput} keyboardType="numeric" defaultValue="0" />
+          {products.map((product) => (
+            <View key={product.id} style={styles.listItemContainer}>
+              <Image
+                source={product.image}
+                style={[
+                  product.id === 1 && styles.image_sopaTomate,
+                  product.id === 2 && styles.image_sopaPasta,
+                  product.id === 3 && styles.image_sancocho,
+                  product.id === 4 && styles.image_cremaAuyama,
+                ]}
+              />
+              <View style={styles.textContainer}>
+                <Text style={styles.listItemTitle}>{product.name}</Text>
+                <Text style={styles.description}>{product.description}</Text>
+                <Text style={styles.price}>
+                  ${product.price.toLocaleString()}
+                </Text>
+                <View style={styles.actionContainer}>
+                  <TouchableOpacity
+                    style={styles.cartButton}
+                    onPress={() => addToCart(product.id)}
+                  >
+                    <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
+                  </TouchableOpacity>
+                  <Text style={styles.label}>
+                    Cantidad en el carrito: {product.quantity}
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
-
-          {/* Bebida 2 */}
-          <View style={styles.listItemContainer}>
-            <Image source={require('@/assets/sopitas/SopaPasta.png')} style={styles.image_sopaPasta} />
-            <View style={styles.textContainer}>
-              <Text style={styles.listItemTitle}>Sopa de Pasta</Text>
-              <Text style={styles.description}>Caliente y reconfortante, con pasta suave en un caldo sabroso, ideal para disfrutar en cualquier momento.</Text>
-              <Text style={styles.price}>$10.000</Text>
-              <View style={styles.actionContainer}>
-                <TouchableOpacity style={styles.cartButton}>
-                  <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
-                </TouchableOpacity>
-                <Text style={styles.label}>Cantidad en el carrito:</Text>
-                <TextInput style={styles.quantityInput} keyboardType="numeric" defaultValue="0" />
-              </View>
-            </View>
-          </View>
-
-          {/* Bebida 3 */}
-          <View style={styles.listItemContainer}>
-            <Image source={require('@/assets/sopitas/Sancocho.png')} style={styles.image_sancocho} />
-            <View style={styles.textContainer}>
-              <Text style={styles.listItemTitle}>Sancocho</Text>
-              <Text style={styles.description}>Tradicional y sustancioso, con carne, tubérculos y verduras en un caldo lleno de sabor, perfecto para compartir en familia.</Text>
-              <Text style={styles.price}>$10.000</Text>
-              <View style={styles.actionContainer}>
-                <TouchableOpacity style={styles.cartButton}>
-                  <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
-                </TouchableOpacity>
-                <Text style={styles.label}>Cantidad en el carrito:</Text>
-                <TextInput style={styles.quantityInput} keyboardType="numeric" defaultValue="0" />
-              </View>
-            </View>
-          </View>
-
-          {/* Bebida 4 */}
-          <View style={styles.listItemContainer}>
-            <Image source={require('@/assets/sopitas/cremaAuyama.png')} style={styles.image_cremaAuyama} />
-            <View style={styles.textContainer}>
-              <Text style={styles.listItemTitle}>Crema de Auyama</Text>
-              <Text style={styles.description}>Suave y aterciopelada, con el sabor dulce y delicado de la auyama, perfecta para una comida ligera y reconfortante.</Text>
-              <Text style={styles.price}>$7.000</Text>
-              <View style={styles.actionContainer}>
-                <TouchableOpacity style={styles.cartButton}>
-                  <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
-                </TouchableOpacity>
-                <Text style={styles.label}>Cantidad en el carrito:</Text>
-                <TextInput style={styles.quantityInput} keyboardType="numeric" defaultValue="0" />
-              </View>
-            </View>
-          </View>
+          ))}
         </View>
       </ScrollView>
+
+
+
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
@@ -93,33 +144,39 @@ const Sopitas = () => {
   );
 };
 
-export default Sopitas;
+
+
+
+export default sopitas;
+
+
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 16,
-    backgroundColor: '#d32f2f',
+    backgroundColor: "#d32f2f",
   },
   headerText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   cartIcon: {
     fontSize: 24,
-    color: '#fff',
+    color: "#fff",
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
     marginVertical: 20,
   },
   content: {
@@ -130,12 +187,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   listItemContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 20,
     padding: 10,
     borderWidth: 1,
-    borderColor: '#d32f2f',
+    borderColor: "#d32f2f",
     borderRadius: 8,
   },
   image_sopaTomate: {
@@ -163,55 +220,47 @@ const styles = StyleSheet.create({
   },
   listItemTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   description: {
     fontSize: 14,
-    color: '#555',
+    color: "#555",
     marginVertical: 5,
   },
   price: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#d32f2f',
+    fontWeight: "bold",
+    color: "#d32f2f",
   },
   actionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 10,
   },
   cartButton: {
-    backgroundColor: '#d32f2f',
+    backgroundColor: "#d32f2f",
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
     marginRight: 10,
   },
   cartButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   label: {
     fontSize: 14,
-    color: '#555',
+    color: "#555",
     marginRight: 5,
   },
-  quantityInput: {
-    width: 40,
-    height: 30,
-    borderColor: '#d32f2f',
-    borderWidth: 1,
-    textAlign: 'center',
-    borderRadius: 5,
-  },
   footer: {
-    backgroundColor: '#d32f2f',
+    backgroundColor: "#d32f2f",
     padding: 16,
-    alignItems: 'center',
+    alignItems: "center",
   },
   footerText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
 });

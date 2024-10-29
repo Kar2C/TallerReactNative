@@ -106,7 +106,43 @@ const CarritoScreen = () => {
                     ? styles.imageNaranja
                     : item.name === "Malteada"
                     ? styles.imageMalteada
-                    : styles.imageLimonada
+                    : item.name === "Limonada"
+                    ? styles.imageLimonada
+                    : item.name === "Té de Valeriana"
+                    ? styles.imagete
+                    : item.name === "Tinto"
+                    ? styles.imagetinto
+                    : item.name === "Café en Leche"
+                    ? styles.imagecafe
+                    : item.name === "Chocolate"
+                    ? styles.imageChocolate
+                    : item.name === "Sopa de Tomate"
+                    ? styles.image_sopaTomate
+                    : item.name === "Sopa de Pasta"
+                    ? styles.image_sopaPasta
+                    : item.name === "Sancocho"
+                    ? styles.image_sancocho
+                    : item.name === "Crema de Auyama"
+                    ? styles.image_cremaAuyama
+                    : item.name === "Bandeja Paisa"
+                    ? styles.imagePaisa
+                    : item.name === "Hamburguesa"
+                    ? styles.imageburguer
+                    : item.name === "Pasta Carbonara"
+                    ? styles.imagepasta
+                    : item.name === "Perro Caliente"
+                    ? styles.imageperro
+                    : item.name === "Salmon"
+                    ? styles.imagesalmon
+                    : item.name === "Carne Asada"
+                    ? styles.carneAsada
+                    : item.name === "Carne Wok"
+                    ? styles.carneWok
+                    : item.name === "Pechuga"
+                    ? styles.pechuga
+                    : item.name === "Pollo"
+                    ? styles.pollo
+                    : styles.mojarra
                 }
               />
               <TouchableOpacity
@@ -264,23 +300,26 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontStyle: "italic",
   },
-  imageSoda: {
-    width: 110,
-    height: 140,
-    marginStart: 9,
-  },
-  imageNaranja: {
-    width: 120,
-    height: 150,
-  },
-  imageMalteada: {
-    width: 85,
-    height: 190,
-    marginStart: 27,
-  },
-  imageLimonada: {
-    width: 110,
-    height: 140,
-    marginStart: 7,
-  },
+  imageSoda: { width: 110, height: 140, marginStart: 9 },
+  imageNaranja: { width: 120, height: 150 },
+  imageMalteada: { width: 85, height: 190, marginStart: 27 },
+  imageLimonada: { width: 110, height: 140, marginStart: 7 },
+  imagete: { width: 135, height: 115 },
+  imagetinto: { width: 135, height: 170 },
+  imagecafe: { width: 150, height: 150 },
+  imageChocolate: { width: 145, height: 160 },
+  image_sopaTomate: { width: 175, height: 145 },
+  image_sopaPasta: { width: 153, height: 135, marginStart: 20 },
+  image_sancocho: { width: 160, height: 125, marginStart: 14 },
+  image_cremaAuyama: { width: 170, height: 157, marginStart: 8 },
+  imagePaisa: { width: 210, height: 127 },
+  imageburguer: { width: 175, height: 170 },
+  imagepasta: { width: 170, height: 170 },
+  imageperro: { width: 180, height: 150 },
+  imagesalmon: { width: 170, height: 170 },
+  carneAsada: { width: 210, height: 127 },
+  carneWok: { width: 185, height: 130 },
+  pechuga: { width: 200, height: 160 },
+  pollo: { width: 180, height: 150 },
+  mojarra: { width: 210, height: 120 },
 });

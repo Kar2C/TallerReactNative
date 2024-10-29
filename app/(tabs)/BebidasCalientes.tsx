@@ -10,7 +10,6 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-
 type Product = {
   id: number;
   name: string;
@@ -19,7 +18,6 @@ type Product = {
   image: any;
   quantity: number;
 };
-
 
 const productsData: Product[] = [
   {
@@ -57,9 +55,13 @@ const productsData: Product[] = [
 ];
 
 
+
+
 const BebidasCalientes = () => {
   const [products, setProducts] = useState(productsData);
   const navigation = useNavigation<StackNavigationProp<any>>();
+
+
 
 
   const addToCart = (productId: number) => {
@@ -71,6 +73,8 @@ const BebidasCalientes = () => {
       )
     );
   };
+
+
 
 
   return (
@@ -87,7 +91,11 @@ const BebidasCalientes = () => {
       </View>
 
 
+
+
       <Text style={styles.title}>Bebidas Calientes</Text>
+
+
 
 
       <ScrollView style={styles.content}>
@@ -127,6 +135,8 @@ const BebidasCalientes = () => {
       </ScrollView>
 
 
+
+
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
       </View>
@@ -135,7 +145,11 @@ const BebidasCalientes = () => {
 };
 
 
+
+
 export default BebidasCalientes;
+
+
 
 
 const styles = StyleSheet.create({
@@ -182,23 +196,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   imagete: {
-    width: 110,
-    height: 140,
-    marginStart: 9,
+    width: 135,
+    height: 115,
   },
   imagetinto: {
-    width: 120,
-    height: 150,
+    width: 135,
+    height: 170,
   },
   imagecafe: {
-    width: 85,
-    height: 190,
-    marginStart: 27,
+    width: 150,
+    height: 150,
   },
   imageChocolate: {
-    width: 110,
-    height: 140,
-    marginStart: 7,
+    width: 145,
+    height: 160,
   },
   textContainer: {
     flex: 1,
@@ -250,5 +261,3 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
   },
 });
-
-
