@@ -196,20 +196,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   imagete: {
-    width: 135,
-    height: 115,
+    width: 123,
+    height: 105,
   },
   imagetinto: {
-    width: 135,
-    height: 170,
+    width: 110,
+    height: 140,
   },
   imagecafe: {
-    width: 150,
-    height: 150,
+    width: 120,
+    height: 120,
   },
   imageChocolate: {
-    width: 145,
-    height: 160,
+    width: 120,
+    height: 130,
   },
   textContainer: {
     flex: 1,
@@ -236,14 +236,15 @@ const styles = StyleSheet.create({
   },
   cartButton: {
     backgroundColor: "#d32f2f",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 5,
     borderRadius: 5,
-    marginRight: 10,
+    marginRight: 7,
   },
   cartButtonText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 11,
   },
   label: {
     fontSize: 14,
