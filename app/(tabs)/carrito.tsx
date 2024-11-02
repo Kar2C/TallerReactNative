@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { StackNavigationProp } from '@react-navigation/stack'; // Importar el tipo de navegación
+import { RouteProp } from '@react-navigation/native';
 
-const CarritoScreen = () => {
+// Definir los tipos para las props
+type CarritoScreenProps = {
+  navigation: StackNavigationProp<any>; // Cambia 'any' por el tipo específico si lo conoces
+  route: RouteProp<any, any>; // Cambia 'any' por el tipo específico si lo conoces
+};
+
+const CarritoScreen: React.FC<CarritoScreenProps> = ({ navigation, route }) => {
   const [cart, setCart] = useState<{ id: number; name: string; price: number; quantity: number }[]>([]);
 
   // Función para obtener el carrito actualizado
