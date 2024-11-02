@@ -39,27 +39,55 @@ const CarritoScreen = () => {
     const updatedCart = cart.reduce((acc, item) => {
       if (item.id === id) {
         if (item.quantity > 1) {
-          // Disminuir la cantidad si es mayor a 1
           acc.push({ ...item, quantity: item.quantity - 1 });
         }
-        // Si la cantidad es 1, no lo agrega al nuevo carrito, eliminándolo efectivamente
       } else {
         acc.push(item);
       }
       return acc;
     }, [] as { id: number; name: string; price: number; quantity: number }[]);
-  
+
     setCart(updatedCart);
     await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
   };
+
+  // Calcular el subtotal
+  const calculateSubtotal = () => {
+    return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  };
+
+  // Calcular el costo del domicilio
+  const calculateDeliveryCost = (subtotal: number) => {
+    if (subtotal === 0) {
+      return 0; // Domicilio gratis si el subtotal es 0
+    } else if (subtotal > 90000) {
+      return 0; // Domicilio gratis
+    } else if (subtotal > 70000) {
+      return 3000; // Domicilio a $3.000
+    } else {
+      return 5000; // Domicilio a $5.000
+    }
+  };
+
+  // Calcular el total
+  const calculateTotal = () => {
+    const subtotal = calculateSubtotal();
+    const deliveryCost = calculateDeliveryCost(subtotal);
+    return subtotal + deliveryCost;
+  };
+
+  const subtotal = calculateSubtotal();
+  const deliveryCost = calculateDeliveryCost(subtotal);
+  const total = calculateTotal();
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {cart.map((item) => (
         <View key={item.id} style={styles.cartItem}>
           <Text style={styles.itemName}>{item.name}</Text>
-          <Text style={styles.itemPrice}>Precio: ${item.price}</Text>
+          <Text style={styles.itemPrice}>Precio Unitario: ${item.price}</Text>
           <Text style={styles.itemQuantity}>Cantidad: {item.quantity}</Text>
+          <Text style={styles.totalPrice}>Total: ${item.price * item.quantity}</Text>
           <View style={styles.quantityContainer}>
             <TouchableOpacity onPress={() => incrementQuantity(item.id)} style={styles.quantityButton}>
               <Text style={styles.quantityButtonText}>+</Text>
@@ -70,6 +98,12 @@ const CarritoScreen = () => {
           </View>
         </View>
       ))}
+
+      <View style={styles.summaryContainer}>
+        <Text style={styles.summaryText}>Subtotal: ${subtotal}</Text>
+        <Text style={styles.summaryText}>Valor Domicilio: ${deliveryCost}</Text>
+        <Text style={styles.summaryText}>Total: ${total}</Text>
+      </View>
     </ScrollView>
   );
 };
@@ -98,8 +132,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginVertical: 5,
   },
+  totalPrice: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#388e3c",
+    marginTop: 5,
+  },
   quantityContainer: {
     flexDirection: "row",
+    marginTop: 10,
   },
   quantityButton: {
     backgroundColor: "#d32f2f",
@@ -110,6 +151,17 @@ const styles = StyleSheet.create({
   quantityButtonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  summaryContainer: {
+    marginTop: 20,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+  },
+  summaryText: {
+    fontSize: 18,
+    marginVertical: 5,
   },
 });
 
