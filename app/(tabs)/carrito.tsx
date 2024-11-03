@@ -52,7 +52,7 @@ const CarritoScreen: React.FC = () => {
       }
       return acc;
     }, [] as { id: number; name: string; price: number; quantity: number }[]);
-    
+
     updateCart(updatedCart);
   };
 
@@ -92,95 +92,130 @@ const CarritoScreen: React.FC = () => {
     };
     const storedOrders = await AsyncStorage.getItem("orders");
     const orders = storedOrders ? JSON.parse(storedOrders) : [];
-    orders.unshift(newOrder); // Agrega el nuevo pedido al inicio
+    orders.unshift(newOrder);
     await AsyncStorage.setItem("orders", JSON.stringify(orders));
-    setModalVisible(false); // Cierra el modal
-    setOrderDate(""); // Resetea la fecha
-    setCart([]); // Limpia el carrito después de confirmar el pedido
-    await AsyncStorage.removeItem("cart"); // Elimina el carrito del almacenamiento
-    navigation.navigate("Historial"); // Navega al historial
+    setModalVisible(false);
+    setOrderDate("");
+    setCart([]);
+    await AsyncStorage.removeItem("cart");
+    navigation.navigate("Historial");
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {cart.map((item) => (
-        <View key={item.id} style={styles.cartItem}>
-          <Text style={styles.itemName}>{item.name}</Text>
-          <Text style={styles.itemPrice}>Precio Unitario: ${item.price}</Text>
-          <Text style={styles.itemQuantity}>Cantidad: {item.quantity}</Text>
-          <Text style={styles.totalPrice}>
-            Total: ${item.price * item.quantity}
-          </Text>
-          <View style={styles.quantityContainer}>
-            <TouchableOpacity
-              onPress={() => decrementQuantity(item.id)}
-              style={styles.quantityButton}
-            >
-              <Text style={styles.quantityButtonText}>-</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => incrementQuantity(item.id)}
-              style={styles.quantityButton}
-            >
-              <Text style={styles.quantityButtonText}>+</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ))}
-
-      <View style={styles.summaryContainer}>
-        <Text style={styles.summaryText}>Subtotal: ${subtotal}</Text>
-        <Text style={styles.summaryText}>Valor Domicilio: ${deliveryCost}</Text>
-        <Text style={styles.summaryText}>Total: ${total}</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Comida al Vuelo</Text>
       </View>
 
-      <TouchableOpacity
-        style={styles.confirmButton}
-        onPress={() => setModalVisible(true)}
-      >
-        <Text style={styles.confirmButtonText}>Confirmar Pedido</Text>
-      </TouchableOpacity>
-
-      <Modal visible={isModalVisible} transparent animationType="slide">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Ingrese la fecha del pedido</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="YYYY-MM-DD"
-              value={orderDate}
-              onChangeText={setOrderDate}
-            />
-            <View style={styles.modalButtons}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {cart.map((item) => (
+          <View key={item.id} style={styles.cartItem}>
+            <Text style={styles.itemName}>{item.name}</Text>
+            <Text style={styles.itemPrice}>Precio Unitario: ${item.price}</Text>
+            <Text style={styles.itemQuantity}>Cantidad: {item.quantity}</Text>
+            <Text style={styles.totalPrice}>
+              Total: ${item.price * item.quantity}
+            </Text>
+            <View style={styles.quantityContainer}>
               <TouchableOpacity
-                onPress={() => setModalVisible(false)}
-                style={styles.cancelButton}
+                onPress={() => decrementQuantity(item.id)}
+                style={styles.quantityButton}
               >
-                <Text style={styles.buttonText}>Cancelar</Text>
+                <Text style={styles.quantityButtonText}>-</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={confirmOrder}
-                style={styles.acceptButton}
+                onPress={() => incrementQuantity(item.id)}
+                style={styles.quantityButton}
               >
-                <Text style={styles.buttonText}>Aceptar</Text>
+                <Text style={styles.quantityButtonText}>+</Text>
               </TouchableOpacity>
             </View>
           </View>
+        ))}
+
+        <View style={styles.summaryContainer}>
+          <Text style={styles.summaryText}>Subtotal: ${subtotal}</Text>
+          <Text style={styles.summaryText}>Valor Domicilio: ${deliveryCost}</Text>
+          <Text style={styles.summaryText}>Total: ${total}</Text>
         </View>
-      </Modal>
-    </ScrollView>
+
+        <TouchableOpacity
+          style={styles.confirmButton}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.confirmButtonText}>Confirmar Pedido</Text>
+        </TouchableOpacity>
+
+        <Modal visible={isModalVisible} transparent animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Ingrese la fecha del pedido</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="YYYY-MM-DD"
+                value={orderDate}
+                onChangeText={setOrderDate}
+              />
+              <View style={styles.modalButtons}>
+                <TouchableOpacity
+                  onPress={() => setModalVisible(false)}
+                  style={styles.cancelButton}
+                >
+                  <Text style={styles.buttonText}>Cancelar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={confirmOrder}
+                  style={styles.acceptButton}
+                >
+                  <Text style={styles.buttonText}>Aceptar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </ScrollView>
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Sazón Directo a tu Puerta</Text>
+      </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    flex: 1,
     backgroundColor: "#fff",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: "#ff5722",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  headerText: {
+    color: "#fff",
+    fontSize: 26,
+    fontWeight: "bold",
+  },
+  scrollContainer: {
+    padding: 16,
   },
   cartItem: {
     padding: 16,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#ff5722",
     borderRadius: 8,
     marginBottom: 20,
   },
@@ -190,7 +225,7 @@ const styles = StyleSheet.create({
   },
   itemPrice: {
     fontSize: 16,
-    color: "#d32f2f",
+    color: "#ff5722",
   },
   itemQuantity: {
     fontSize: 16,
@@ -207,7 +242,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   quantityButton: {
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#ff5722",
     padding: 8,
     borderRadius: 5,
     marginHorizontal: 5,
@@ -220,7 +255,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#ff5722",
     borderRadius: 8,
   },
   summaryText: {
@@ -265,7 +300,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   cancelButton: {
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#ff5722",
     padding: 10,
     borderRadius: 5,
     marginRight: 10,
@@ -277,6 +312,27 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
+  },
+  footer: {
+    backgroundColor: "#ff5722",
+    padding: 16,
+    alignItems: "center",
+    justifyContent: "center",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  footerText: {
+    color: "#fff",
+    fontSize: 16,
+    fontStyle: "italic",
   },
 });
 

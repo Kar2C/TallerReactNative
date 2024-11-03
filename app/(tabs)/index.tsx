@@ -32,7 +32,7 @@ const MenuScreen = () => {
           >
             <Image
               source={require("@/assets/bebidas_frias.png")}
-              style={styles.image_bebidaFria}
+              style={styles.image}
             />
             <Text style={styles.itemText}>Bebidas frías</Text>
           </TouchableOpacity>
@@ -42,7 +42,7 @@ const MenuScreen = () => {
           >
             <Image
               source={require("@/assets/bebidas_calientes.png")}
-              style={styles.image_bebidaCaliente}
+              style={styles.image}
             />
             <Text style={styles.itemText}>Bebidas Calientes</Text>
           </TouchableOpacity>
@@ -58,7 +58,7 @@ const MenuScreen = () => {
           >
             <Image
               source={require("@/assets/sopitas.png")}
-              style={styles.image_sopitas}
+              style={styles.image}
             />
             <Text style={styles.itemText}>Sopitas</Text>
           </TouchableOpacity>
@@ -68,9 +68,9 @@ const MenuScreen = () => {
           >
             <Image
               source={require("@/assets/platos_carta.png")}
-              style={styles.image_platosCarta}
+              style={styles.image}
             />
-            <Text style={styles.itemText}>Platos fuertes</Text>
+            <Text style={styles.itemText}>Platos a la carta</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.item}
@@ -78,9 +78,9 @@ const MenuScreen = () => {
           >
             <Image
               source={require("@/assets/corrientazo.png")}
-              style={styles.image_corrientazo}
+              style={styles.image}
             />
-            <Text style={styles.itemText}>Corrientazo</Text>
+            <Text style={styles.itemText}>Platos del día</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.separator} />
@@ -94,7 +94,7 @@ const MenuScreen = () => {
           >
             <Image
               source={require("@/assets/menu_infantil.png")}
-              style={styles.image_menuInfantil}
+              style={styles.image}
             />
             <Text style={styles.itemText}>Menú Infantil</Text>
           </TouchableOpacity>
@@ -115,29 +115,40 @@ export default MenuScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f5f5f5",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#ff5722",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerText: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
   },
   cartIcon: {
-    fontSize: 20,
+    fontSize: 22,
     color: "#fff",
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
-    marginVertical: 20,
+    marginVertical: 18,
+    color: "#ff5722",
   },
   sectionContainer: {
     flexDirection: "row",
@@ -147,47 +158,51 @@ const styles = StyleSheet.create({
   },
   item: {
     alignItems: "center",
-    width: 110,
+    width: 130, // Aumentado el ancho para más espacio
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 10,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   itemText: {
     textAlign: "center",
     marginTop: 8,
-    fontSize: 17
+    fontSize: 18,
+    fontWeight: "500",
+    color: "#333",
   },
-  image_bebidaFria: {
-    width: 75,
-    height: 70,
-  },
-  image_bebidaCaliente: {
-    width: 75,
-    height: 70,
-  },
-  image_sopitas: {
-    width: 85,
-    height: 70,
-  },
-  image_platosCarta: {
-    width: 120,
-    height: 70,
-  },
-  image_corrientazo: {
-    width: 120,
-    height: 70,
-  },
-  image_menuInfantil: {
-    width: 65,
-    height: 80,
+  image: {
+    width: 100, // Aumentado tamaño de la imagen
+    height: 100, // Aumentado tamaño de la imagen
+    resizeMode: "contain",
   },
   separator: {
-    borderBottomColor: "#d32f2f",
-    borderBottomWidth: 3,
-    marginVertical: 35,
+    borderBottomColor: "#ff5722",
+    borderBottomWidth: 2,
+    marginVertical: 18,
   },
   footer: {
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#ff5722",
     padding: 16,
     alignItems: "center",
     justifyContent: "center",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   footerText: {
     color: "#fff",

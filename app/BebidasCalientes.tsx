@@ -147,11 +147,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#ff5722",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerText: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
   },
   container: {
@@ -161,7 +171,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#d32f2f",
+    borderColor: "#ff5722",
     borderRadius: 8,
   },
   image: {
@@ -182,7 +192,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 18,
-    color: "#d32f2f",
+    color: "#ff5722",
     marginTop: 5,
   },
   quantityText: {
@@ -191,7 +201,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   addButton: {
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#ff5722",
     padding: 8,
     marginTop: 10,
     borderRadius: 5,
@@ -202,16 +212,25 @@ const styles = StyleSheet.create({
     fontSize: 19,
   },
   footer: {
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#ff5722",
     padding: 16,
     alignItems: "center",
+    justifyContent: "center",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   footerText: {
     color: "#fff",
     fontSize: 16,
     fontStyle: "italic",
-
-
   },
 });
 

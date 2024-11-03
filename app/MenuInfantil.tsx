@@ -25,8 +25,8 @@ const Menuinfantil = () => {
       name: "Cajita sorpresa Perro Caliente",
       description:
         "Una divertida cajita que incluye un delicioso perro caliente con salchicha jugosa, papas fritas, una bebida refrescante y una sorpresa especial; ¡una deliciosa experiencia para los niños!",
-      price: 8000,
-      image: require("@/assets/menu/perro.png"), // Asegúrate de que la ruta sea correcta
+      price: 22000,
+      image: require("@/assets/menu/perro.png"),
       quantity: 0,
     },
     {
@@ -34,8 +34,8 @@ const Menuinfantil = () => {
       name: "Cajita sorpresa Hamburguesa",
       description:
         "Una emocionante cajita que contiene una jugosa hamburguesa de res, papas fritas, una bebida y una sorpresa especial; un festín delicioso que hará sonreír a los más pequeños.",
-      price: 6000,
-      image: require("@/assets/menu/burguer.png"), // Asegúrate de que la ruta sea correcta
+      price: 22000,
+      image: require("@/assets/menu/burguer.png"),
       quantity: 0,
     },
     {
@@ -43,8 +43,8 @@ const Menuinfantil = () => {
       name: "Cajita sorpresa Nuggets",
       description:
         "Una divertida cajita que incluye crujientes nuggets de pollo, papas fritas, una bebida y una sorpresa especial para los pequeños; la combinación perfecta de sabor y diversión.",
-      price: 12000,
-      image: require("@/assets/menu/nugets.png"), // Asegúrate de que la ruta sea correcta
+      price: 20000,
+      image: require("@/assets/menu/nugets.png"),
       quantity: 0,
     },
   
@@ -142,11 +142,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 16,
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#ff5722",
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerText: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
   },
   container: {
@@ -156,7 +166,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#d32f2f",
+    borderColor: "#ff5722",
     borderRadius: 8,
   },
   image: {
@@ -177,7 +187,7 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 18,
-    color: "#d32f2f",
+    color: "#ff5722",
     marginTop: 5,
   },
   quantityText: {
@@ -186,7 +196,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   addButton: {
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#ff5722",
     padding: 8,
     marginTop: 10,
     borderRadius: 5,
@@ -197,16 +207,25 @@ const styles = StyleSheet.create({
     fontSize: 19,
   },
   footer: {
-    backgroundColor: "#d32f2f",
+    backgroundColor: "#ff5722",
     padding: 16,
     alignItems: "center",
+    justifyContent: "center",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   footerText: {
     color: "#fff",
     fontSize: 16,
     fontStyle: "italic",
-
-
   },
 });
 
