@@ -1,145 +1,142 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   Image,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: any;
-  quantity: number;
-};
 
-const productsData: Product[] = [
-  {
-    id: 1,
-    name: "Bandeja Paisa",
-    description: "...",
-    price: 250,
-    image: require("@/assets/platosCarta/bandejaPaisa.png"),
-    quantity: 0,
-  },
-  {
-    id: 2,
-    name: "Hamburguesa",
-    description: "...",
-    price: 120,
-    image: require("@/assets/platosCarta/hamburguesa.png"),
-    quantity: 0,
-  },
-  {
-    id: 3,
-    name: "Pasta Carbonara",
-    description: "...",
-    price: 300,
-    image: require("@/assets/platosCarta/pasta.png"),
-    quantity: 0,
-  },
-  {
-    id: 4,
-    name: "Perro Caliente",
-    description: "...",
-    price: 350,
-    image: require("@/assets/platosCarta/perro.png"),
-    quantity: 0,
-  },
-  {
-    id: 5,
-    name: "Salmon",
-    description: "...",
-    price: 3500,
-    image: require("@/assets/platosCarta/salmon.png"),
-    quantity: 0,
-  },
-];
-
-
-
-
-const BebidasCalientes = () => {
-  const [products, setProducts] = useState(productsData);
+const PlatosCarta = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
 
+  const [cartQuantities, setCartQuantities] = useState<{ [key: number]: number }>({});
 
 
-  const addToCart = (productId: number) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
-      )
-    );
+  const PlatosCarta = [
+    {
+      id: 13,
+      name: "Bandeja Paisa",
+      description: "Plato tradicional y abundante, con arroz, frijoles, chicharrón, carne molida, huevo, plátano maduro, arepa y aguacate; una explosión de sabores colombianos.",
+      price: 250,
+      image: require("@/assets/platosCarta/bandejaPaisa.png"),
+      quantity: 0,
+    },
+    {
+      id: 14,
+      name: "Hamburguesa",
+      description: " Jugosa y llena de sabor, con carne a la parrilla y acompañada de ingredientes frescos en un pan suave, ideal para satisfacer cualquier antojo.",
+      price: 120,
+      image: require("@/assets/platosCarta/hamburguesa.png"),
+      quantity: 0,
+    },
+    {
+      id: 15,
+      name: "Pasta Carbonara",
+      description: "Cremosa y deliciosa, con salsa de queso y toques de tocineta, una receta clásica italiana llena de sabor.",
+      price: 300,
+      image: require("@/assets/platosCarta/pasta.png"),
+      quantity: 0,
+    },
+    {
+      id: 16,
+      name: "Perro Caliente",
+      description: "Clásico y delicioso, con salchicha jugosa en pan suave, acompañado de tus ingredientes favoritos para un bocado perfecto.",
+      price: 350,
+      image: require("@/assets/platosCarta/perro.png"),
+      quantity: 0,
+    },
+    {
+      id: 17,
+      name: "Salmon",
+      description: "Filete de salmón jugoso y tierno, acompañado de una mezcla de verduras frescas, ideal para una comida saludable y deliciosa.",
+      price: 3500,
+      image: require("@/assets/platosCarta/salmon.png"),
+      quantity: 0,
+    },
+  
+  ];
+
+
+  useEffect(() => {
+    const fetchCartQuantities = async () => {
+      const storedCart = await AsyncStorage.getItem("cart");
+      const cart = storedCart ? JSON.parse(storedCart) : [];
+      const quantities = cart.reduce(
+        (acc: { [key: number]: number }, item: { id: number; quantity: number }) => {
+          acc[item.id] = item.quantity;
+          return acc;
+        },
+        {}
+      );
+      setCartQuantities(quantities);
+    };
+
+
+    fetchCartQuantities();
+  }, []);
+
+
+  const addToCart = async (item: { id: number; name: string; price: number }) => {
+    const storedCart = await AsyncStorage.getItem("cart");
+    let updatedCart = storedCart ? JSON.parse(storedCart) : [];
+
+
+    const itemIndex = updatedCart.findIndex((i: { id: number }) => i.id === item.id);
+    if (itemIndex > -1) {
+      updatedCart[itemIndex].quantity += 1;
+    } else {
+      updatedCart.push({ ...item, quantity: 1 });
+    }
+
+
+    setCartQuantities((prev) => ({
+      ...prev,
+      [item.id]: updatedCart[itemIndex]?.quantity || 1,
+    }));
+
+
+    await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
 
-
-
   return (
-    <View style={styles.container}>
+    <View style={styles.screen}>
+      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>Comida al Vuelo</Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("carrito", { products, setProducts })
-          }
-        >
-          <Text style={styles.cartIcon}>🛒</Text>
-        </TouchableOpacity>
+        <Text style={styles.headerText}>Comida al vuelo</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("carrito", { products: [] })}>
+            <Text style={styles.cartIcon}>🛒</Text>
+          </TouchableOpacity>
       </View>
 
-      <Text style={styles.title}>Platos a la carta</Text>
 
-      <ScrollView style={styles.content}>
-        <View style={styles.listContainer}>
-          {products.map((product) => (
-            <View key={product.id} style={styles.listItemContainer}>
-              <Image
-                source={product.image}
-                style={[
-                  product.id === 1 && styles.imagePaisa,
-                  product.id === 2 && styles.imageburguer,
-                  product.id === 3 && styles.imagepasta,
-                  product.id === 4 && styles.imageperro,
-                  product.id === 5 && styles.imagesalmon,
-                ]}
-              />
-              <View style={styles.textContainer}>
-                <Text style={styles.listItemTitle}>{product.name}</Text>
-                <Text style={styles.description}>{product.description}</Text>
-                <Text style={styles.price}>
-                  ${product.price.toLocaleString()}
-                </Text>
-                <View style={styles.actionContainer}>
-                  <TouchableOpacity
-                    style={styles.cartButton}
-                    onPress={() => addToCart(product.id)}
-                  >
-                    <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.label}>
-                    Cantidad en el carrito: {product.quantity}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          ))}
-        </View>
+      {/* Main Content */}
+      <ScrollView contentContainerStyle={styles.container}>
+        {PlatosCarta.map((bebida) => (
+          <View key={bebida.id} style={styles.bebidaContainer}>
+            <Text style={styles.name}>{bebida.name}</Text>
+            <Image source={bebida.image} style={styles.image} />
+            <Text style={styles.description}>{bebida.description}</Text>
+            <Text style={styles.price}>Precio: ${bebida.price}</Text>
+            <Text style={styles.quantityText}>
+              Cantidad en el carrito: {cartQuantities[bebida.id] || 0}
+            </Text>
+            <TouchableOpacity onPress={() => addToCart(bebida)} style={styles.addButton}>
+              <Text style={styles.addButtonText}>Añadir al carrito</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
       </ScrollView>
 
 
-
-
+      {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
       </View>
@@ -148,15 +145,8 @@ const BebidasCalientes = () => {
 };
 
 
-
-
-export default BebidasCalientes;
-
-
-
-
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: "#fff",
   },
@@ -172,90 +162,52 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-  cartIcon: {
-    fontSize: 24,
-    color: "#fff",
+  container: {
+    padding: 16,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
-  listContainer: {
+  bebidaContainer: {
     marginBottom: 20,
-  },
-  listItemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-    padding: 10,
+    padding: 16,
     borderWidth: 1,
     borderColor: "#d32f2f",
     borderRadius: 8,
   },
-  imagePaisa: {
-    width: 210,
-    height: 127,
+  image: {
+    width: 140,
+    height: 140,
   },
-  imageburguer: {
-    width: 175,
-    height: 170,
-  },
-  imagepasta: {
-    width: 170,
-    height: 170,
-  },
-  imageperro: {
-    width: 180,
-    height: 150,
-  },
-  imagesalmon: {
-    width: 170,
-    height: 170,
-  },
-  textContainer: {
-    flex: 1,
-    marginStart: 21,
-  },
-  listItemTitle: {
-    fontSize: 20,
+  name: {
+    fontSize: 22,
     fontWeight: "bold",
+  },
+  cartIcon: {
+    fontSize: 20,
+    color: "#fff",
   },
   description: {
-    fontSize: 14,
+    fontSize: 18,
     color: "#555",
-    marginVertical: 5,
   },
   price: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 18,
     color: "#d32f2f",
+    marginTop: 5,
   },
-  actionContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  cartButton: {
-    backgroundColor: "#d32f2f",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  cartButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  label: {
-    fontSize: 14,
+  quantityText: {
+    fontSize: 16,
     color: "#555",
-    marginRight: 5,
+    marginTop: 5,
+  },
+  addButton: {
+    backgroundColor: "#d32f2f",
+    padding: 8,
+    marginTop: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  addButtonText: {
+    color: "#fff",
+    fontSize: 19,
   },
   footer: {
     backgroundColor: "#d32f2f",
@@ -266,5 +218,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontStyle: "italic",
+
+
   },
 });
+
+
+export default PlatosCarta;

@@ -8,9 +8,16 @@ import {
   ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+
 
 const BebidasFriasScreen = () => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+
   const [cartQuantities, setCartQuantities] = useState<{ [key: number]: number }>({});
+
 
   const bebidasFrias = [
     {
@@ -47,6 +54,7 @@ const BebidasFriasScreen = () => {
     },
   ];
 
+
   useEffect(() => {
     const fetchCartQuantities = async () => {
       const storedCart = await AsyncStorage.getItem("cart");
@@ -61,12 +69,15 @@ const BebidasFriasScreen = () => {
       setCartQuantities(quantities);
     };
 
+
     fetchCartQuantities();
   }, []);
+
 
   const addToCart = async (item: { id: number; name: string; price: number }) => {
     const storedCart = await AsyncStorage.getItem("cart");
     let updatedCart = storedCart ? JSON.parse(storedCart) : [];
+
 
     const itemIndex = updatedCart.findIndex((i: { id: number }) => i.id === item.id);
     if (itemIndex > -1) {
@@ -75,20 +86,27 @@ const BebidasFriasScreen = () => {
       updatedCart.push({ ...item, quantity: 1 });
     }
 
+
     setCartQuantities((prev) => ({
       ...prev,
       [item.id]: updatedCart[itemIndex]?.quantity || 1,
     }));
 
+
     await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
   };
+
 
   return (
     <View style={styles.screen}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Comida al vuelo</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("carrito", { products: [] })}>
+            <Text style={styles.cartIcon}>🛒</Text>
+          </TouchableOpacity>
       </View>
+
 
       {/* Main Content */}
       <ScrollView contentContainerStyle={styles.container}>
@@ -108,6 +126,7 @@ const BebidasFriasScreen = () => {
         ))}
       </ScrollView>
 
+
       {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
@@ -115,6 +134,7 @@ const BebidasFriasScreen = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   screen: {
@@ -144,24 +164,28 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 140,
+    height: 140,
   },
   name: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
   },
+  cartIcon: {
+    fontSize: 20,
+    color: "#fff",
+  },
   description: {
-    fontSize: 14,
+    fontSize: 18,
     color: "#555",
   },
   price: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#d32f2f",
     marginTop: 5,
   },
   quantityText: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#555",
     marginTop: 5,
   },
@@ -171,10 +195,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 5,
     alignItems: "center",
-  },
+    },
   addButtonText: {
     color: "#fff",
-    fontSize: 16,
+    fontSize: 19,
   },
   footer: {
     backgroundColor: "#d32f2f",
@@ -186,7 +210,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontStyle: "italic",
 
+
   },
 });
+
 
 export default BebidasFriasScreen;

@@ -8,11 +8,18 @@ import {
   ScrollView,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-const BebidasCalientesScreen = () => {
+
+const BebidasCalientes = () => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+
   const [cartQuantities, setCartQuantities] = useState<{ [key: number]: number }>({});
 
-  const bebidasCalientes = [
+
+  const BebidasCalientes = [
     {
       id: 5,
       name: "Té de Valeriana",
@@ -42,29 +49,36 @@ const BebidasCalientesScreen = () => {
       name: "Chocolate",
       description: "Cremoso y reconfortante, con un sabor intenso a cacao, ideal para endulzar cualquier momento.",
       price: 3500,
-      image: require("@/assets/Bebidascalientes/chocolate.webp"),
+      image: require("@/assets/Bebidascalientes/chocolate.png"),
       quantity: 0,
     },
   
   ];
 
+
   useEffect(() => {
     const fetchCartQuantities = async () => {
       const storedCart = await AsyncStorage.getItem("cart");
       const cart = storedCart ? JSON.parse(storedCart) : [];
-      const quantities = cart.reduce((acc: { [key: number]: number }, item: { id: number; quantity: number }) => {
-        acc[item.id] = item.quantity;
-        return acc;
-      }, {});
+      const quantities = cart.reduce(
+        (acc: { [key: number]: number }, item: { id: number; quantity: number }) => {
+          acc[item.id] = item.quantity;
+          return acc;
+        },
+        {}
+      );
       setCartQuantities(quantities);
     };
+
 
     fetchCartQuantities();
   }, []);
 
+
   const addToCart = async (item: { id: number; name: string; price: number }) => {
     const storedCart = await AsyncStorage.getItem("cart");
     let updatedCart = storedCart ? JSON.parse(storedCart) : [];
+
 
     const itemIndex = updatedCart.findIndex((i: { id: number }) => i.id === item.id);
     if (itemIndex > -1) {
@@ -73,65 +87,106 @@ const BebidasCalientesScreen = () => {
       updatedCart.push({ ...item, quantity: 1 });
     }
 
+
     setCartQuantities((prev) => ({
       ...prev,
       [item.id]: updatedCart[itemIndex]?.quantity || 1,
     }));
 
+
     await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {bebidasCalientes.map((bebida) => (
-        <View key={bebida.id} style={styles.bebidaContainer}>
-          <Image source={bebida.image} style={styles.image} />
-          <Text style={styles.name}>{bebida.name}</Text>
-          <Text style={styles.description}>{bebida.description}</Text>
-          <Text style={styles.price}>Precio: ${bebida.price}</Text>
-          <Text style={styles.quantityText}>
-            Cantidad en el carrito: {cartQuantities[bebida.id] || 0}
-          </Text>
-          <TouchableOpacity onPress={() => addToCart(bebida)} style={styles.addButton}>
-            <Text style={styles.addButtonText}>Añadir al carrito</Text>
+    <View style={styles.screen}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Comida al vuelo</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("carrito", { products: [] })}>
+            <Text style={styles.cartIcon}>🛒</Text>
           </TouchableOpacity>
-        </View>
-      ))}
-    </ScrollView>
+      </View>
+
+
+      {/* Main Content */}
+      <ScrollView contentContainerStyle={styles.container}>
+        {BebidasCalientes.map((bebida) => (
+          <View key={bebida.id} style={styles.bebidaContainer}>
+            <Text style={styles.name}>{bebida.name}</Text>
+            <Image source={bebida.image} style={styles.image} />
+            <Text style={styles.description}>{bebida.description}</Text>
+            <Text style={styles.price}>Precio: ${bebida.price}</Text>
+            <Text style={styles.quantityText}>
+              Cantidad en el carrito: {cartQuantities[bebida.id] || 0}
+            </Text>
+            <TouchableOpacity onPress={() => addToCart(bebida)} style={styles.addButton}>
+              <Text style={styles.addButtonText}>Añadir al carrito</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </ScrollView>
+
+
+      {/* Footer */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
+      </View>
+    </View>
   );
 };
 
+
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: "#d32f2f",
+  },
+  headerText: {
+    color: "#fff",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
   container: {
     padding: 16,
-    backgroundColor: "#fff",
   },
   bebidaContainer: {
     marginBottom: 20,
     padding: 16,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#d32f2f",
     borderRadius: 8,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 140,
+    height: 140,
   },
   name: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: "bold",
   },
+  cartIcon: {
+    fontSize: 20,
+    color: "#fff",
+  },
   description: {
-    fontSize: 14,
+    fontSize: 18,
     color: "#555",
   },
   price: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#d32f2f",
     marginTop: 5,
   },
   quantityText: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#555",
     marginTop: 5,
   },
@@ -144,8 +199,21 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     color: "#fff",
+    fontSize: 19,
+  },
+  footer: {
+    backgroundColor: "#d32f2f",
+    padding: 16,
+    alignItems: "center",
+  },
+  footerText: {
+    color: "#fff",
     fontSize: 16,
+    fontStyle: "italic",
+
+
   },
 });
 
-export default BebidasCalientesScreen;
+
+export default BebidasCalientes;

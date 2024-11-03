@@ -1,142 +1,141 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   Image,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image: any;
-  quantity: number;
-};
 
-const productsData: Product[] = [
-  {
-    id: 1,
-    name: "Carne Asada",
-    description: "...",
-    price: 250,
-    image: require("@/assets/corrientazo/carneAsada.png"),
-    quantity: 0,
-  },
-  {
-    id: 2,
-    name: "Carne Wok",
-    description: "...",
-    price: 120,
-    image: require("@/assets/corrientazo/carneWok.png"),
-    quantity: 0,
-  },
-  {
-    id: 3,
-    name: "Pechuga",
-    description: "...",
-    price: 300,
-    image: require("@/assets/corrientazo/pechuga.png"),
-    quantity: 0,
-  },
-  {
-    id: 4,
-    name: "Pollo",
-    description: "...",
-    price: 350,
-    image: require("@/assets/corrientazo/pollo.png"),
-    quantity: 0,
-  },
-  {
-    id: 5,
-    name: "Mojarra",
-    description: "...",
-    price: 3500,
-    image: require("@/assets/corrientazo/trucha.png"),
-    quantity: 0,
-  },
-];
-
-
-
-
-const BebidasCalientes = () => {
-  const [products, setProducts] = useState(productsData);
+const PlatoDia = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
 
+  const [cartQuantities, setCartQuantities] = useState<{ [key: number]: number }>({});
 
 
-  const addToCart = (productId: number) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
-      )
-    );
+  const PlatoDia = [
+    {
+      id: 18,
+      name: "Carne Asada",
+      description: "Jugosa carne a la parrilla, acompañada de arroz esponjoso, papas doradas, huevo frito y verduras frescas para una comida completa y deliciosa.",
+      price: 250,
+      image: require("@/assets/corrientazo/carneAsada.png"),
+      quantity: 0,
+    },
+    {
+      id: 19,
+      name: "Carne Wok",
+      description: "Trozos de carne salteados al wok, acompañados de arroz suave, huevo frito y papas doradas para un plato lleno de sabor y textura.",
+      price: 120,
+      image: require("@/assets/corrientazo/carneWok.png"),
+      quantity: 0,
+    },
+    {
+      id: 20,
+      name: "Pechuga",
+      description: "Pechuga de pollo jugosa a la plancha, servida con una ensalada fresca, arroz, frijoles, plátano maduro, una cremosa salsa de champiñones y jugo natural para acompañar. Una combinación completa y balanceada.",
+      price: 300,
+      image: require("@/assets/corrientazo/pechuga.png"),
+      quantity: 0,
+    },
+    {
+      id: 21,
+      name: "Pollo",
+      description: " Tierno pollo acompañado de arroz esponjoso y verduras frescas, perfecto para una comida ligera y nutritiva.",
+      price: 350,
+      image: require("@/assets/corrientazo/pollo.png"),
+      quantity: 0,
+    },
+    {
+      id: 22,
+      name: "Mojarra",
+      description: "Deliciosa y crujiente, con piel dorada y carne jugosa, perfecta para disfrutar con limón y acompañada de arroz y ensalada.",
+      price: 3500,
+      image: require("@/assets/corrientazo/trucha.png"),
+      quantity: 0,
+    },  
+  ];
+
+
+  useEffect(() => {
+    const fetchCartQuantities = async () => {
+      const storedCart = await AsyncStorage.getItem("cart");
+      const cart = storedCart ? JSON.parse(storedCart) : [];
+      const quantities = cart.reduce(
+        (acc: { [key: number]: number }, item: { id: number; quantity: number }) => {
+          acc[item.id] = item.quantity;
+          return acc;
+        },
+        {}
+      );
+      setCartQuantities(quantities);
+    };
+
+
+    fetchCartQuantities();
+  }, []);
+
+
+  const addToCart = async (item: { id: number; name: string; price: number }) => {
+    const storedCart = await AsyncStorage.getItem("cart");
+    let updatedCart = storedCart ? JSON.parse(storedCart) : [];
+
+
+    const itemIndex = updatedCart.findIndex((i: { id: number }) => i.id === item.id);
+    if (itemIndex > -1) {
+      updatedCart[itemIndex].quantity += 1;
+    } else {
+      updatedCart.push({ ...item, quantity: 1 });
+    }
+
+
+    setCartQuantities((prev) => ({
+      ...prev,
+      [item.id]: updatedCart[itemIndex]?.quantity || 1,
+    }));
+
+
+    await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
+
   return (
-    <View style={styles.container}>
+    <View style={styles.screen}>
+      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>Comida al Vuelo</Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("carrito", { products, setProducts })
-          }
-        >
-          <Text style={styles.cartIcon}>🛒</Text>
-        </TouchableOpacity>
+        <Text style={styles.headerText}>Comida al vuelo</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("carrito", { products: [] })}>
+            <Text style={styles.cartIcon}>🛒</Text>
+          </TouchableOpacity>
       </View>
 
-      <Text style={styles.title}>Platos del día</Text>
 
-      <ScrollView style={styles.content}>
-        <View style={styles.listContainer}>
-          {products.map((product) => (
-            <View key={product.id} style={styles.listItemContainer}>
-              <Image
-                source={product.image}
-                style={[
-                  product.id === 1 && styles.carneAsada,
-                  product.id === 2 && styles.carneWok,
-                  product.id === 3 && styles.pechuga,
-                  product.id === 4 && styles.pollo,
-                  product.id === 5 && styles.mojarra,
-                ]}
-              />
-              <View style={styles.textContainer}>
-                <Text style={styles.listItemTitle}>{product.name}</Text>
-                <Text style={styles.description}>{product.description}</Text>
-                <Text style={styles.price}>
-                  ${product.price.toLocaleString()}
-                </Text>
-                <View style={styles.actionContainer}>
-                  <TouchableOpacity
-                    style={styles.cartButton}
-                    onPress={() => addToCart(product.id)}
-                  >
-                    <Text style={styles.cartButtonText}>AGREGAR AL CARRITO</Text>
-                  </TouchableOpacity>
-                  <Text style={styles.label}>
-                    Cantidad en el carrito: {product.quantity}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          ))}
-        </View>
+      {/* Main Content */}
+      <ScrollView contentContainerStyle={styles.container}>
+        {PlatoDia.map((bebida) => (
+          <View key={bebida.id} style={styles.bebidaContainer}>
+            <Text style={styles.name}>{bebida.name}</Text>
+            <Image source={bebida.image} style={styles.image} />
+            <Text style={styles.description}>{bebida.description}</Text>
+            <Text style={styles.price}>Precio: ${bebida.price}</Text>
+            <Text style={styles.quantityText}>
+              Cantidad en el carrito: {cartQuantities[bebida.id] || 0}
+            </Text>
+            <TouchableOpacity onPress={() => addToCart(bebida)} style={styles.addButton}>
+              <Text style={styles.addButtonText}>Añadir al carrito</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
       </ScrollView>
 
 
-
-
+      {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
       </View>
@@ -145,15 +144,8 @@ const BebidasCalientes = () => {
 };
 
 
-
-
-export default BebidasCalientes;
-
-
-
-
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
     backgroundColor: "#fff",
   },
@@ -169,90 +161,52 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-  cartIcon: {
-    fontSize: 24,
-    color: "#fff",
+  container: {
+    padding: 16,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginVertical: 20,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
-  listContainer: {
+  bebidaContainer: {
     marginBottom: 20,
-  },
-  listItemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-    padding: 10,
+    padding: 16,
     borderWidth: 1,
     borderColor: "#d32f2f",
     borderRadius: 8,
   },
-  carneAsada: {
-    width: 210,
-    height: 127,
-  },
-  carneWok: {
-    width: 185,
-    height: 130,
-  },
-  pechuga: {
-    width: 200,
-    height: 160,
-  },
-  pollo: {
-    width: 180,
+  image: {
+    width: 150,
     height: 150,
   },
-  mojarra: {
-    width: 210,
-    height: 120,
-  },
-  textContainer: {
-    flex: 1,
-    marginStart: 21,
-  },
-  listItemTitle: {
-    fontSize: 20,
+  name: {
+    fontSize: 22,
     fontWeight: "bold",
+  },
+  cartIcon: {
+    fontSize: 20,
+    color: "#fff",
   },
   description: {
-    fontSize: 14,
+    fontSize: 18,
     color: "#555",
-    marginVertical: 5,
   },
   price: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 18,
     color: "#d32f2f",
+    marginTop: 5,
   },
-  actionContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 10,
-  },
-  cartButton: {
-    backgroundColor: "#d32f2f",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  cartButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  label: {
-    fontSize: 14,
+  quantityText: {
+    fontSize: 16,
     color: "#555",
-    marginRight: 5,
+    marginTop: 5,
+  },
+  addButton: {
+    backgroundColor: "#d32f2f",
+    padding: 8,
+    marginTop: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  addButtonText: {
+    color: "#fff",
+    fontSize: 19,
   },
   footer: {
     backgroundColor: "#d32f2f",
@@ -263,5 +217,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontStyle: "italic",
+
+
   },
 });
+
+
+export default PlatoDia;
