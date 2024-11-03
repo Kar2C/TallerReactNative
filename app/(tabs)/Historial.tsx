@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HistorialScreen: React.FC = () => {
@@ -16,6 +16,19 @@ const HistorialScreen: React.FC = () => {
       setOrders(parsedOrders);
     } catch (error) {
       console.error("Error loading orders:", error);
+    }
+  };
+
+  // Función para eliminar un pedido
+  const deleteOrder = async (index: number) => {
+    const updatedOrders = orders.filter((_, i) => i !== index);
+    setOrders(updatedOrders);
+
+    // Guardar el nuevo historial en AsyncStorage
+    try {
+      await AsyncStorage.setItem("orders", JSON.stringify(updatedOrders));
+    } catch (error) {
+      console.error("Error saving orders:", error);
     }
   };
 
@@ -40,7 +53,7 @@ const HistorialScreen: React.FC = () => {
         <FlatList
           data={orders}
           keyExtractor={(item, index) => index.toString()} // Idealmente, aquí deberías tener un ID único
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <View style={styles.orderContainer}>
               <Text style={styles.dateText}>Fecha: {item.date}</Text>
               <Text style={styles.subtotalText}>Subtotal: ${item.subtotal}</Text>
@@ -52,6 +65,9 @@ const HistorialScreen: React.FC = () => {
                   {product.name} x {product.quantity} - ${product.price * product.quantity}
                 </Text>
               ))}
+              <TouchableOpacity style={styles.deleteButton} onPress={() => deleteOrder(index)}>
+                <Text style={styles.deleteButtonText}>Eliminar Pedido</Text>
+              </TouchableOpacity>
             </View>
           )}
         />
@@ -59,7 +75,6 @@ const HistorialScreen: React.FC = () => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -111,6 +126,16 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 14,
     marginVertical: 2,
+  },
+  deleteButton: {
+    backgroundColor: "#e57373",
+    borderRadius: 5,
+    padding: 10,
+    marginTop: 10,
+  },
+  deleteButtonText: {
+    color: "#fff",
+    textAlign: "center",
   },
 });
 
