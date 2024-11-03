@@ -1,49 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { StackNavigationProp } from '@react-navigation/stack'; // Importar el tipo de navegación
-import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native";
 
-// Definir los tipos para las props
-type CarritoScreenProps = {
-  navigation: StackNavigationProp<any>; // Cambia 'any' por el tipo específico si lo conoces
-  route: RouteProp<any, any>; // Cambia 'any' por el tipo específico si lo conoces
-};
-
-const CarritoScreen: React.FC<CarritoScreenProps> = ({ navigation, route }) => {
+const CarritoScreen: React.FC = () => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
   const [cart, setCart] = useState<{ id: number; name: string; price: number; quantity: number }[]>([]);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [orderDate, setOrderDate] = useState("");
 
-  // Función para obtener el carrito actualizado
   const fetchCart = async () => {
     const storedCart = await AsyncStorage.getItem("cart");
-    setCart(storedCart ? JSON.parse(storedCart) : []);
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
   };
 
-  // useEffect que se llama cuando la pantalla se renderiza
   useEffect(() => {
-    fetchCart();  // Cargar el carrito al inicio
+    fetchCart();
   }, []);
 
-  // useEffect que escucha cambios en el AsyncStorage
-  useEffect(() => {
-    const updateCart = async () => {
-      fetchCart(); // Actualizar el carrito al detectar cambios
-    };
-    const interval = setInterval(updateCart, 1000); // Cada segundo verifica cambios
-    return () => clearInterval(interval); // Limpiar el intervalo al desmontar
-  }, []);
-
-  // Función para incrementar la cantidad
-  const incrementQuantity = async (id: number) => {
-    const updatedCart = cart.map((item) =>
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-    );
+  const updateCart = async (updatedCart: { id: number; name: string; price: number; quantity: number }[]) => {
     setCart(updatedCart);
     await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  // Función para disminuir la cantidad
-  const decrementQuantity = async (id: number) => {
+  const incrementQuantity = (id: number) => {
+    const updatedCart = cart.map((item) =>
+      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+    );
+    updateCart(updatedCart);
+  };
+
+  const decrementQuantity = (id: number) => {
     const updatedCart = cart.reduce((acc, item) => {
       if (item.id === id) {
         if (item.quantity > 1) {
@@ -54,30 +52,26 @@ const CarritoScreen: React.FC<CarritoScreenProps> = ({ navigation, route }) => {
       }
       return acc;
     }, [] as { id: number; name: string; price: number; quantity: number }[]);
-
-    setCart(updatedCart);
-    await AsyncStorage.setItem("cart", JSON.stringify(updatedCart));
+    
+    updateCart(updatedCart);
   };
 
-  // Calcular el subtotal
   const calculateSubtotal = () => {
     return cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
 
-  // Calcular el costo del domicilio
   const calculateDeliveryCost = (subtotal: number) => {
     if (subtotal === 0) {
-      return 0; // Domicilio gratis si el subtotal es 0
+      return 0;
     } else if (subtotal > 90000) {
-      return 0; // Domicilio gratis
+      return 0;
     } else if (subtotal > 70000) {
-      return 3000; // Domicilio a $3.000
+      return 3000;
     } else {
-      return 5000; // Domicilio a $5.000
+      return 5000;
     }
   };
 
-  // Calcular el total
   const calculateTotal = () => {
     const subtotal = calculateSubtotal();
     const deliveryCost = calculateDeliveryCost(subtotal);
@@ -88,6 +82,25 @@ const CarritoScreen: React.FC<CarritoScreenProps> = ({ navigation, route }) => {
   const deliveryCost = calculateDeliveryCost(subtotal);
   const total = calculateTotal();
 
+  const confirmOrder = async () => {
+    const newOrder = {
+      date: orderDate,
+      items: cart,
+      subtotal,
+      deliveryCost,
+      total,
+    };
+    const storedOrders = await AsyncStorage.getItem("orders");
+    const orders = storedOrders ? JSON.parse(storedOrders) : [];
+    orders.unshift(newOrder); // Agrega el nuevo pedido al inicio
+    await AsyncStorage.setItem("orders", JSON.stringify(orders));
+    setModalVisible(false); // Cierra el modal
+    setOrderDate(""); // Resetea la fecha
+    setCart([]); // Limpia el carrito después de confirmar el pedido
+    await AsyncStorage.removeItem("cart"); // Elimina el carrito del almacenamiento
+    navigation.navigate("Historial"); // Navega al historial
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {cart.map((item) => (
@@ -95,13 +108,21 @@ const CarritoScreen: React.FC<CarritoScreenProps> = ({ navigation, route }) => {
           <Text style={styles.itemName}>{item.name}</Text>
           <Text style={styles.itemPrice}>Precio Unitario: ${item.price}</Text>
           <Text style={styles.itemQuantity}>Cantidad: {item.quantity}</Text>
-          <Text style={styles.totalPrice}>Total: ${item.price * item.quantity}</Text>
+          <Text style={styles.totalPrice}>
+            Total: ${item.price * item.quantity}
+          </Text>
           <View style={styles.quantityContainer}>
-            <TouchableOpacity onPress={() => incrementQuantity(item.id)} style={styles.quantityButton}>
-              <Text style={styles.quantityButtonText}>+</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => decrementQuantity(item.id)} style={styles.quantityButton}>
+            <TouchableOpacity
+              onPress={() => decrementQuantity(item.id)}
+              style={styles.quantityButton}
+            >
               <Text style={styles.quantityButtonText}>-</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => incrementQuantity(item.id)}
+              style={styles.quantityButton}
+            >
+              <Text style={styles.quantityButtonText}>+</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -112,6 +133,41 @@ const CarritoScreen: React.FC<CarritoScreenProps> = ({ navigation, route }) => {
         <Text style={styles.summaryText}>Valor Domicilio: ${deliveryCost}</Text>
         <Text style={styles.summaryText}>Total: ${total}</Text>
       </View>
+
+      <TouchableOpacity
+        style={styles.confirmButton}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.confirmButtonText}>Confirmar Pedido</Text>
+      </TouchableOpacity>
+
+      <Modal visible={isModalVisible} transparent animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Ingrese la fecha del pedido</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="YYYY-MM-DD"
+              value={orderDate}
+              onChangeText={setOrderDate}
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(false)}
+                style={styles.cancelButton}
+              >
+                <Text style={styles.buttonText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={confirmOrder}
+                style={styles.acceptButton}
+              >
+                <Text style={styles.buttonText}>Aceptar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -170,6 +226,57 @@ const styles = StyleSheet.create({
   summaryText: {
     fontSize: 18,
     marginVertical: 5,
+  },
+  confirmButton: {
+    backgroundColor: "#388e3c",
+    padding: 16,
+    borderRadius: 8,
+    marginTop: 20,
+    alignItems: "center",
+  },
+  confirmButtonText: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: 300,
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  modalTitle: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  input: {
+    borderBottomWidth: 1,
+    width: "100%",
+    padding: 8,
+    marginBottom: 20,
+  },
+  modalButtons: {
+    flexDirection: "row",
+  },
+  cancelButton: {
+    backgroundColor: "#d32f2f",
+    padding: 10,
+    borderRadius: 5,
+    marginRight: 10,
+  },
+  acceptButton: {
+    backgroundColor: "#388e3c",
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "#fff",
   },
 });
 
