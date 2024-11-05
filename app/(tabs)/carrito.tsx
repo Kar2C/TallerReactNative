@@ -149,7 +149,7 @@ const CarritoScreen: React.FC = () => {
         <Modal visible={isModalVisible} transparent animationType="slide">
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>Ingrese la fecha del pedido</Text>
+              <Text style={styles.modalTitle}>Ingrese la fecha del pedido </Text>
               <TextInput
                 style={styles.input}
                 placeholder="YYYY-MM-DD"
@@ -176,7 +176,7 @@ const CarritoScreen: React.FC = () => {
       </ScrollView>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>Sazón Directo a tu Puerta</Text>
+        <Text style={styles.footerText}>Sazón Directo a tu Puerta 🍲</Text>
       </View>
     </View>
   );

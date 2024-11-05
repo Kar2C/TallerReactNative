@@ -10,13 +10,20 @@ const HistorialScreen: React.FC = () => {
   const loadOrders = async () => {
     try {
       const storedOrders = await AsyncStorage.getItem("orders");
-      const parsedOrders = storedOrders ? JSON.parse(storedOrders) : [];
+      let parsedOrders = storedOrders ? JSON.parse(storedOrders) : [];
+      
+      // Ordena los pedidos por fecha descendente
+      parsedOrders.sort((a: { date: string }, b: { date: string }) => 
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+      );
+  
       console.log("Orders loaded:", parsedOrders);
       setOrders(parsedOrders);
     } catch (error) {
       console.error("Error loading orders:", error);
     }
   };
+  
 
   const deleteOrder = async (index: number) => {
     const updatedOrders = orders.filter((_, i) => i !== index);
