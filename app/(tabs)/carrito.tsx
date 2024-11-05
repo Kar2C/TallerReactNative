@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 const CarritoScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<any>>();
   const [cart, setCart] = useState<{ id: number; name: string; price: number; quantity: number }[]>([]);
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false); 
   const [orderDate, setOrderDate] = useState("");
 
   const fetchCart = async () => {
