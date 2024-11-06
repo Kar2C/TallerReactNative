@@ -99,7 +99,6 @@ const BebidasFriasScreen = () => {
 
   return (
     <View style={styles.screen}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Comida al vuelo</Text>
         <TouchableOpacity onPress={() => navigation.navigate("carrito", { products: [] })}>
@@ -107,8 +106,6 @@ const BebidasFriasScreen = () => {
           </TouchableOpacity>
       </View>
 
-
-      {/* Main Content */}
       <ScrollView contentContainerStyle={styles.container}>
         {bebidasFrias.map((bebida) => (
           <View key={bebida.id} style={styles.bebidaContainer}>
@@ -126,8 +123,6 @@ const BebidasFriasScreen = () => {
         ))}
       </ScrollView>
 
-
-      {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
       </View>

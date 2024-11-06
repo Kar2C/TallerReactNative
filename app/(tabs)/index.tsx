@@ -23,7 +23,6 @@ const MenuScreen = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Sección: Bebidas */}
         <Text style={styles.sectionTitle}>BEBIDAS</Text>
         <View style={styles.sectionContainer}>
           <TouchableOpacity
@@ -49,7 +48,6 @@ const MenuScreen = () => {
         </View>
         <View style={styles.separator} />
 
-        {/* Sección: Platos Fuertes */}
         <Text style={styles.sectionTitle}>PLATOS FUERTES</Text>
         <View style={styles.sectionContainer}>
           <TouchableOpacity
@@ -85,7 +83,6 @@ const MenuScreen = () => {
         </View>
         <View style={styles.separator} />
 
-        {/* Sección: Menú Infantil */}
         <Text style={styles.sectionTitle}>MENÚ INFANTIL</Text>
         <View style={styles.sectionContainer}>
           <TouchableOpacity
@@ -102,7 +99,6 @@ const MenuScreen = () => {
         <View style={styles.separator} />
       </ScrollView>
 
-      {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
       </View>
@@ -158,7 +154,7 @@ const styles = StyleSheet.create({
   },
   item: {
     alignItems: "center",
-    width: 130, // Aumentado el ancho para más espacio
+    width: 130, 
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 10,
@@ -179,8 +175,8 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   image: {
-    width: 100, // Aumentado tamaño de la imagen
-    height: 100, // Aumentado tamaño de la imagen
+    width: 100, 
+    height: 100,
     resizeMode: "contain",
   },
   separator: {

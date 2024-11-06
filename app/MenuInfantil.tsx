@@ -95,7 +95,6 @@ const Menuinfantil = () => {
 
   return (
     <View style={styles.screen}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Comida al vuelo</Text>
         <TouchableOpacity onPress={() => navigation.navigate("carrito", { products: [] })}>
@@ -103,8 +102,6 @@ const Menuinfantil = () => {
           </TouchableOpacity>
       </View>
 
-
-      {/* Main Content */}
       <ScrollView contentContainerStyle={styles.container}>
         {Menuinfantil.map((bebida) => (
           <View key={bebida.id} style={styles.bebidaContainer}>
@@ -122,8 +119,6 @@ const Menuinfantil = () => {
         ))}
       </ScrollView>
 
-
-      {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
       </View>

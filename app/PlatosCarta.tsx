@@ -108,7 +108,6 @@ const PlatosCarta = () => {
 
   return (
     <View style={styles.screen}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Comida al vuelo</Text>
         <TouchableOpacity onPress={() => navigation.navigate("carrito", { products: [] })}>
@@ -116,8 +115,6 @@ const PlatosCarta = () => {
           </TouchableOpacity>
       </View>
 
-
-      {/* Main Content */}
       <ScrollView contentContainerStyle={styles.container}>
         {PlatosCarta.map((bebida) => (
           <View key={bebida.id} style={styles.bebidaContainer}>
@@ -135,8 +132,6 @@ const PlatosCarta = () => {
         ))}
       </ScrollView>
 
-
-      {/* Footer */}
       <View style={styles.footer}>
         <Text style={styles.footerText}>Sazón directo a tu puerta 🍲</Text>
       </View>
